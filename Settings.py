@@ -4,10 +4,12 @@ NColumnas = 7
 
 #Definir el tipo de juego Ej conecta4 o conecta5 o conecta6 etc
 JUEGODE = 5
-LIMITE = NFilas - JUEGODE 
+LIMITEHOR = 3
+LIMITEVER = 2 
 
 num1 = JUEGODE*5
 num2 = JUEGODE*3
+
 
 TAMFI = 100
 
