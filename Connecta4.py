@@ -3,6 +3,9 @@ from numpy.lib.stride_tricks import broadcast_arrays
 from scipy.signal import convolve2d
 from Settings import *
 import pygame, sys
+from pygame.locals import *
+import math
+from VICTORY import *
 
 def crearTablero():
     Tablero = np.zeros((NFilas, NColumnas))
@@ -12,7 +15,11 @@ def soltarPieza(Tablero, y, x, Pieza):
     Tablero[x][y] = Pieza 
 
 def movidaLegal(Tablero, x):
-    return Tablero[NFilas-1][x] == 0
+    if Tablero[NFilas-1][x] == 0:
+        return True
+    else:
+        print('Ya no caben fichas ahí!')
+        return False
 
 def filaDisp(Tablero , x):
     for i in range(NFilas):
@@ -53,62 +60,77 @@ def Ganar(Tablero, Pieza):
                 return True
 
 def DIB_TABLERO(Tablero):
-    pass
+    for C in range(NColumnas):
+        for F in range(NFilas):
+            pygame.draw.rect(ventana, AZUL, (C*TAMFI, F*TAMFI+TAMFI, TAMFI, TAMFI))
+            pygame.draw.circle(ventana, NEGRO, (int(C*TAMFI+TAMFI/2), int(F*TAMFI+TAMFI+TAMFI/2)), RAD)
+            
+        for C in range(NColumnas):
+            for F in range(NFilas):
+                if Tablero[F][C] == 1:
+                    pygame.draw.circle(ventana, ROJO, (int(C*TAMFI+TAMFI/2), ALTURA-int(F*TAMFI+TAMFI/2)), RAD)
+                elif Tablero[F][C] == 2:
+                    pygame.draw.circle(ventana, AMARILLO, (int(C*TAMFI+TAMFI/2), ALTURA-int(F*TAMFI+TAMFI/2)), RAD)
+    
+    pygame.display.update()
 
+
+            
 
 Tablero = crearTablero()
-Turno = 1
+print(Tablero)
+
+Turno = 0
 
 FIN = False
 
 pygame.init()
 
-screen = pygame.display.set_mode(TAMVEN)
+ventana = pygame.display.set_mode(TAMVEN)
+DIB_TABLERO(Tablero)
+pygame.display.update()
+
+FONT = pygame.font.SysFont("monospace", 75)
 
 while not FIN:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            sys.exit()
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit() 
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            #Jugador 1
+            if Turno ==0:
+                print('Turno del jugador 1')
+                posx = event.pos[0]
+                x = int(math.floor(posx/TAMFI))
+                if movidaLegal(Tablero, x):
+                    y = filaDisp(Tablero, x)
+                    soltarPieza(Tablero, x, y, 1)
+                    if Ganar(Tablero,1):
+                     TXT = FONT.render("PLAYER 1 WIIINS!",1 , BLANCO)
 
+                     ventana.blit(TXT, (40, 10))
+                     FIN = True
 
+            #Jugador 2
+            else:
+                print('Turno del jugador 2')
+                posx2 = event.pos[0]
+                x = int(math.floor(posx2/TAMFI))
+                if movidaLegal(Tablero, x):
+                    y = filaDisp(Tablero, x)
+                    soltarPieza(Tablero, x, y, 2)
+                    if Ganar(Tablero, 2):
+                        TXT = FONT.render("PLAYER 2 WIIINS!",1 , BLANCO)
+                        ventana.blit(TXT, (40, 10))
+                        FIN = True
+            
+            Orientacion(Tablero)
+            DIB_TABLERO(Tablero)
 
+            Turno += 1
+            Turno = Turno % 2
 
-
-    #Jugador 1
-    if Turno ==1:
-        x = input("Turno del jugador 1, haga su movida (0-6):")
-        x = int(x)
-        if movidaLegal(Tablero, x):
-            y = filaDisp(Tablero, x)
-            soltarPieza(Tablero, x, y, 3)
-            if Ganar(Tablero, 3):
-                Orientacion(Tablero)
-                print('Maravishosa Jugada Player 1 WIIIIIIIIIIIIIIIIINS!')
-                FIN = True
-                break
-            Turno = 2
-        else:
-            print('Movida no legal!')
-            Turno = 1
-        
-        Orientacion(Tablero)
-        
-
-    #Jugador 2
-    if Turno ==2:
-        x = input("Turno del jugador 2, haga su movida (0-6):")
-        x = int(x)
-        if movidaLegal(Tablero, x):
-            y = filaDisp(Tablero, x)
-            soltarPieza(Tablero, x, y, 5)
-            if Ganar(Tablero, 5):
-                Orientacion(Tablero)
-                print('Maravishosa Jugada Player 2 WIIIIIIIIIIIIIIIIINS!')
-                FIN = True
-                break
-            Turno = 1
-        else:
-            print('Movida no legal!')
-            Turno = 2
-        
-        Orientacion(Tablero)
+            if FIN:
+                pygame.time.wait(3500)
+                VIDEO()

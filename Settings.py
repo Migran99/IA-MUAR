@@ -4,18 +4,26 @@ NColumnas = 7
 
 #Definir el tipo de juego Ej conecta4 o conecta5 o conecta6 etc
 JUEGODE = 5
+
 LIMITEHOR = 3
 LIMITEVER = 2 
 
 num1 = JUEGODE*5
 num2 = JUEGODE*3
 
-
-TAMFI = 100
+TAMFI = 110
 
 ANCHO = NColumnas*TAMFI
-ALTURA = NFilas*TAMFI
+ALTURA = (NFilas+1)*TAMFI
 
 TAMVEN = (ANCHO, ALTURA)
 
-#Definir la paleta de colores con la que se desea jugar
+RAD = int(TAMFI/2 - 5 )
+
+#Definir la paleta de colores (en RGB) con la que se desea jugar
+
+AZUL = (0,0,255)
+NEGRO = (0,0,0)
+ROJO = (255, 0, 0)
+AMARILLO = (255, 255, 0)
+BLANCO = (255, 255, 255)
