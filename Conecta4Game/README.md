@@ -8,14 +8,15 @@ Integrantes:
 - German
 
 Para poder correr este código adecuadamente, es necesario que el sistema tenga las siguientes librerias instaladas
-numpy
-scipy.signal
-pygame, sys
-pygame.locals
-math
-cv2
+numpy,
+scipy.signal,
+pygame, sys,
+pygame.locals,
+math,
+cv2,
 
-Adicionalmente, es necesario que todas las carpetas esten guardadas juntas y en la misma direccion de el trabajo de espacio.
+Adicionalmente, es necesario que el archivo de "VIDEO" este guardado fuera de la carpeta del juego, en la misma direccion del espacio de trabajo.
+
 Para comenzar el juego el usuario puede "Modificar" algunos parametros en el archivo de Settings.
 
 Para comenzar el juego solo es necesario correr el archivo "Main".

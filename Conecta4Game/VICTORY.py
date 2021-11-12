@@ -7,7 +7,7 @@ from ffpyplayer.player import MediaPlayer
 def VIDEO():
     mixer.init()
 
-    video = cv2.VideoCapture("DankCatV3.mpeg")
+    video = cv2.VideoCapture("VIDEO.mpeg")
     success, video_image = video.read()
     fps = video.get(cv2.CAP_PROP_FPS)
 
