@@ -1,7 +1,12 @@
 import pygame
 import cv2
+from pygame import mixer
+from ffpyplayer.player import MediaPlayer
+
 
 def VIDEO():
+    mixer.init()
+
     video = cv2.VideoCapture("DankCatV3.mpeg")
     success, video_image = video.read()
     fps = video.get(cv2.CAP_PROP_FPS)

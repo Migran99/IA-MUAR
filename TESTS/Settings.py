@@ -6,7 +6,7 @@ NColumnas = 7
 JUEGODE = 5
 
 LIMITEHOR = 3
-LIMITEVER = 2
+LIMITEVER = 2 
 
 FIN = False
 
