@@ -1,11 +1,11 @@
 # IA-MUAR
 Repository for the code of Artificial Intelligence. Máster en Automática y Robótica [MUAR]. UPM
-Trabajo de IA
-Integrantes: 
-- Miguel
+
+Members: 
+- Miguel Granero
 - Antonio Caamaño
 - Lucas Rey
-- German
+- German Ferrando
 
 ## Requirements
 The use of a virtual environment is recommended.
