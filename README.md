@@ -17,8 +17,7 @@ pip install -r ./requirements.txt
 
 ## Game without AI - Conecta4Game
 
-Adicionalmente, es necesario que el archivo de "VIDEO" este guardado fuera de la carpeta del juego, en la misma direccion del espacio de trabajo.
 
 Para comenzar el juego el usuario puede "Modificar" algunos parametros en el archivo de Settings.
 
-Para comenzar el juego solo es necesario correr el archivo "Main".
+Para comenzar el juego solo es necesario correr el archivo "main.py" o "Conecta4V2.py".
