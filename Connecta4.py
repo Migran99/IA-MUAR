@@ -159,6 +159,23 @@ def Player(draw_text, ventana, PL):
     ventana.blit(TXT1, (10, 10))
     pygame.display.update()
 
+def funcion_puntua(ventana_deslizante,Pieza):
+    puntuacion=0
+    pieza_contrario= PLAYER_PIECE
+    if Pieza== PLAYER_PIECE:
+        pieza_contrario= AI_PIECE
+    
+    if ventana_deslizante.count(Pieza)==4:
+            puntuacion+=100
+    elif ventana_deslizante.count(Pieza)==3 and ventana_deslizante.count(VACIO)==1:
+            puntuacion+=10
+    elif ventana_deslizante.count(Pieza)==2 and ventana_deslizante.count(VACIO)==2:
+            puntuacion+=5
+
+    if ventana_deslizante.count(pieza_contrario)==3 and ventana_deslizante.count(VACIO)==1:
+            puntuacion-=8
+
+    return puntuacion
 def Start_events():
         global STATE
         for event in pygame.event.get():
@@ -169,16 +186,31 @@ def puntuacion_heuristica(Tablero,Pieza):
     ##Puntuar horizontalmente
     puntuacion=0
     for F in range(NFilas):
-        vector_columnas=[int(t) for t in list(Tablero[F,:])]
+        vector_filas=[int(t) for t in list(Tablero[F,:])]
         for C in range(NColumnas-LIMITEHOR):
-            ventana_deslizante=vector_columnas[C:C+ANCHO_VENTANA] 
-            if ventana_deslizante.count(Pieza)==4:
-                puntuacion += 100
-            
-            elif ventana_deslizante.count(Pieza) == 3 and ventana_deslizante.count(VACIO)==1:
-                puntuacion +=10
+            ventana_deslizante=vector_filas[C:C+ANCHO_VENTANA] 
+            puntuacion+=funcion_puntua(ventana_deslizante,Pieza)
+##Puntuar verticalmente
+    for C in range(NColumnas):
+        vector_columnas=[int(i) for i in list(Tablero[:,C])]
+        for F in range(NFilas-3):
+            ventana_deslizante=vector_columnas[F:F+ANCHO_VENTANA]
+            puntuacion+=funcion_puntua(ventana_deslizante,Pieza)
 
+##Puntuar diagonalmente positivo
+
+    for F in range(NFilas-3):
+        for C in range (NColumnas-3):
+            ventana_deslizante=[Tablero[F+i][C+i] for i in range (ANCHO_VENTANA)]
+            puntuacion+=funcion_puntua(ventana_deslizante,Pieza)
+##Puntuar diagonalmente negativo
+
+    for F in range(NFilas-3):
+        for C in range (NColumnas-3):
+            ventana_deslizante=[Tablero[F+3-i][C+i] for i in range(ANCHO_VENTANA)]
+            puntuacion+=funcion_puntua(ventana_deslizante,Pieza)
     return puntuacion
+
 
 def pos_validas(Tablero):
     posiciones_v=[]
