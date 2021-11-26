@@ -6,6 +6,7 @@ import pygame, sys
 from pygame.locals import *
 import math
 from VICTORY import *
+from conecta4_ai import *
 
 # Repertorio de funciones del juego
 def crearTablero():
@@ -206,12 +207,13 @@ while not FIN:
                     sys.exit() 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     #Jugador 1
-                    if Turno ==0:
+                    if Turno == 0:
                         TUPL(1)
 
-                    #Jugador 2
+                    #Jugador 2 - AI
                     else:
-                        TUPL(2)
+                        #TUPL(2)
+                        juega_AI()
 
                     DIB_TABLERO(Tablero, ventana)
 
@@ -220,4 +222,4 @@ while not FIN:
 
                     if FIN:
                         pygame.time.wait(3500)
-                        VIDEO()
+                        #VIDEO()
