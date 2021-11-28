@@ -2,13 +2,11 @@ import numpy as np
 from numpy.lib.stride_tricks import broadcast_arrays
 from scipy.signal import convolve2d
 from Settings import *
-import pygame, sys
+import pygame
 from pygame.locals import *
 import math
-import random
-from VICTORY import *
-
 # Repertorio de funciones del juego
+
 def crearTablero():
     Tablero = np.zeros((NFilas, NColumnas))
     return Tablero
@@ -124,9 +122,9 @@ def DIB_TABLERO(Tablero, ventana):
                 
         for C in range(NColumnas):
             for F in range(NFilas):
-                if Tablero[F][C] == PLAYER_PIECE:
+                if Tablero[F][C] == 1:
                     pygame.draw.circle(ventana, ROJO, (int(C*TAMFI+TAMFI/2), ALTURA-int(F*TAMFI+TAMFI/2)), RAD)
-                elif Tablero[F][C] == AI_PIECE:
+                elif Tablero[F][C] == 2:
                     pygame.draw.circle(ventana, AMARILLO, (int(C*TAMFI+TAMFI/2), ALTURA-int(F*TAMFI+TAMFI/2)), RAD)
         
     pygame.display.update()
@@ -159,66 +157,25 @@ def Player(draw_text, ventana, PL):
     ventana.blit(TXT1, (10, 10))
     pygame.display.update()
 
+def Start_events(state):
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            state = 'playing'
+            print("PRESSED")
+    return state
 
-def TUPL():
-    global FIN
-    global Turno
-    Player(draw_text, ventana, PLAYER_PIECE)
+def TUPL(player, tablero, ventana, event, font, FIN):
+    Player(draw_text, ventana, player)
     posx = event.pos[0]
     x = int(math.floor(posx/TAMFI))
-    if movidaLegal(Tablero, x):
-        y = filaDisp(Tablero, x)
-        soltarPieza(Tablero, x, y, PLAYER_PIECE)
-        if Ganar(Tablero,PLAYER_PIECE, ventana):
+    if movidaLegal(tablero, x):
+        y = filaDisp(tablero, x)
+        soltarPieza(tablero, x, y, player)
+        if Ganar(tablero,player, ventana):
             pygame.draw.rect(ventana, NEGRO, (0, 0, NColumnas*TAMFI, TAMFI))
-            SPL = str(PLAYER_PIECE)
+            SPL = str(player)
             S = 'player '+SPL+' WIIIINS!!'
-            TXT = FONT.render(S,1 , BLANCO)
+            TXT = font.render(S,1 , BLANCO)
             ventana.blit(TXT, (10, 10))
             FIN = True
-
-        Turno += 1
-        Turno = Turno % 2
-
-#inicializacion de las variables y de programas
-pygame.init()
-
-Tablero = crearTablero()
-ventana = pygame.display.set_mode(TAMVEN)
-FONT = pygame.font.SysFont("monospace", int(TAMFI/1.5))
-STATE = 'start'
-FIN = False
-Turno=random.randint(PLAYER,AI)
-
-pygame.display.update()
-
-##################Programa principal###########################
-
-while not FIN:
-    if STATE == 'start':
-        Start_draw(draw_text, ventana)
-        Start_events()
-    elif STATE == 'playing':
-        DIB_TABLERO(Tablero, ventana)
-        for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit() 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    #Jugador 1
-                    if Turno ==PLAYER:
-                        TUPL()
-                        DIB_TABLERO(Tablero, ventana)
-
-                    #Jugador 2
-                    if Turno== AI and not FIN:
-                        juega_AI()
-                        DIB_TABLERO(Tablero, ventana)
-
-                    
-
-                    
-
-                    if FIN:
-                        pygame.time.wait(3500)
-                        #VIDEO()
+    return FIN

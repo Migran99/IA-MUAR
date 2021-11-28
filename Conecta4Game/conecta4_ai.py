@@ -1,5 +1,8 @@
-import pygame, math
-from Settings import all
+import pygame, random
+from Settings import *
+from conecta4Functions import *
+
+# Funciones de la IA del juego
 def funcion_puntua(ventana_deslizante,Pieza):
     puntuacion=0
     pieza_contrario= PLAYER_PIECE
@@ -17,11 +20,6 @@ def funcion_puntua(ventana_deslizante,Pieza):
             puntuacion-=8
 
     return puntuacion
-def Start_events():
-        global STATE
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                STATE = 'playing'
 
 def puntuacion_heuristica(Tablero,Pieza):
     ##Puntuar horizontalmente
@@ -77,21 +75,21 @@ def agente(Tablero, Pieza):
      return mejor_col
 
 
-def juega_AI():
+def juega_AI(tablero, ventana, font):
     global FIN
     global Turno
     Player(draw_text, ventana, AI_PIECE)
    
-    x = agente(Tablero,AI_PIECE)
-    if movidaLegal(Tablero, x):
+    x = agente(tablero,AI_PIECE)
+    if movidaLegal(tablero, x):
         pygame.time.wait(500)
-        y = filaDisp(Tablero, x)
-        soltarPieza(Tablero, x, y,AI_PIECE)
-        if Ganar(Tablero,AI_PIECE, ventana):
+        y = filaDisp(tablero, x)
+        soltarPieza(tablero, x, y,AI_PIECE)
+        if Ganar(tablero,AI_PIECE, ventana):
             pygame.draw.rect(ventana, NEGRO, (0, 0, NColumnas*TAMFI, TAMFI))
             SPL = str(AI_PIECE)
             S = 'player '+SPL+' WIIIINS!!'
-            TXT = FONT.render(S,1 , BLANCO)
+            TXT = font.render(S,1 , BLANCO)
             ventana.blit(TXT, (10, 10))
             FIN = True
             
