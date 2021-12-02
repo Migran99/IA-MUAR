@@ -10,25 +10,32 @@ def funcion_puntua(ventana_deslizante,Pieza):
         pieza_contrario= AI_PIECE
     
     if ventana_deslizante.count(Pieza)==4:
-            puntuacion+=100
+            puntuacion += 100
     elif ventana_deslizante.count(Pieza)==3 and ventana_deslizante.count(VACIO)==1:
-            puntuacion+=10
+            puntuacion += 10
     elif ventana_deslizante.count(Pieza)==2 and ventana_deslizante.count(VACIO)==2:
-            puntuacion+=5
+            puntuacion += 5
 
     if ventana_deslizante.count(pieza_contrario)==3 and ventana_deslizante.count(VACIO)==1:
-            puntuacion-=8
+            puntuacion -= 80
 
     return puntuacion
 
 def puntuacion_heuristica(Tablero,Pieza):
-    ##Puntuar horizontalmente
     puntuacion=0
+
+    ##Score center column
+    vector_centro = [int(i) for i in list(Tablero[:,NColumnas//2])]
+    cuenta_centro = vector_centro.count(Pieza)
+    puntuacion += cuenta_centro*6
+
+    ##Puntuar horizontalmente
     for F in range(NFilas):
         vector_filas=[int(t) for t in list(Tablero[F,:])]
         for C in range(NColumnas-LIMITEHOR):
             ventana_deslizante=vector_filas[C:C+ANCHO_VENTANA] 
-            puntuacion+=funcion_puntua(ventana_deslizante,Pieza)
+            puntuacion += funcion_puntua(ventana_deslizante,Pieza)
+
     ##Puntuar verticalmente
     for C in range(NColumnas):
         vector_columnas=[int(i) for i in list(Tablero[:,C])]
@@ -50,6 +57,9 @@ def puntuacion_heuristica(Tablero,Pieza):
             puntuacion+=funcion_puntua(ventana_deslizante,Pieza)
     return puntuacion
 
+def es_nodo_final(Tablero):
+    return winning_move(Tablero, PLAYER_PIECE) or winning_move(Tablero, AI_PIECE) or len(pos_validas(Tablero)) == 0
+
 
 def pos_validas(Tablero):
     posiciones_v=[]
@@ -59,9 +69,48 @@ def pos_validas(Tablero):
 
     return posiciones_v
 
+def minimax(Tablero, profundidad, maximizingPlayer):
+    localizaciones_validas = pos_validas(Tablero)
+    nodo_final = es_nodo_final(Tablero)
+    if profundidad == 0 or nodo_final:
+        if nodo_final:
+            if winning_move(Tablero, AI_PIECE):
+                return (None, 1000000000000000000) #inf
+            elif winning_move(Tablero, PLAYER_PIECE):
+                return (None,-10000000000000000000) #menos inf
+            else: #No + mov validos
+                return (None, 0)
+        else: #Profundidad 0
+            return (None, puntuacion_heuristica(Tablero, AI_PIECE))
+    
+    if maximizingPlayer:
+        valor = -math.inf
+        columna = random.choice(localizaciones_validas)
+        for col in localizaciones_validas:
+            row = movidaLegal(Tablero, col)
+            copia_tablero = Tablero.copy()
+            soltarPieza(copia_tablero, row, col, AI_PIECE)
+            nueva_puntuacion = minimax(copia_tablero,profundidad-1, False)[1]
+            if nueva_puntuacion > valor:
+                valor = nueva_puntuacion
+                columna = col
+        return columna, valor
+
+    else:
+        valor = math.inf
+        for col in localizaciones_validas:
+            row = movidaLegal(Tablero, col)
+            copia_tablero = Tablero.copy()
+            soltarPieza(copia_tablero, row, col, PLAYER_PIECE)
+            nueva_puntuacion =  minimax(copia_tablero,profundidad-1, True)[1]
+            if nueva_puntuacion < valor:
+                valor = nueva_puntuacion
+                columna = col
+        return columna, valor
+    
 def agente(Tablero, Pieza):
      posiciones_v=pos_validas(Tablero)
-     mejor_puntuacion=0
+     mejor_puntuacion=100000
      mejor_col=random.choice(posiciones_v)
      for y in posiciones_v:
          x=filaDisp(Tablero,y)
@@ -81,17 +130,20 @@ def juega_AI(tablero, ventana, font):
     Player(draw_text, ventana, AI_PIECE)
    
     x = agente(tablero,AI_PIECE)
+    #x, minimax_score = minimax(tablero, 2, True)
+
     if movidaLegal(tablero, x):
         pygame.time.wait(500)
         y = filaDisp(tablero, x)
-        soltarPieza(tablero, x, y,AI_PIECE)
-        if Ganar(tablero,AI_PIECE, ventana):
+        soltarPieza(tablero, x, y, AI_PIECE)
+        if Ganar(tablero, AI_PIECE, ventana):
             pygame.draw.rect(ventana, NEGRO, (0, 0, NColumnas*TAMFI, TAMFI))
             SPL = str(AI_PIECE)
             S = 'player '+SPL+' WIIIINS!!'
             TXT = font.render(S,1 , BLANCO)
             ventana.blit(TXT, (10, 10))
             FIN = True
-            
+
+         
         Turno += 1
         Turno = Turno % 2

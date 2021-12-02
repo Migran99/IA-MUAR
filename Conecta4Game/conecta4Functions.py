@@ -29,10 +29,35 @@ def filaDisp(Tablero , x):
 def Orientacion(Tablero):
     print(np.flip(Tablero, 0))
 
+def winning_move(board, piece):
+	# Check horizontal locations for win
+	for c in range(NColumnas-3):
+		for r in range(NFilas):
+			if board[r][c] == piece and board[r][c+1] == piece and board[r][c+2] == piece and board[r][c+3] == piece:
+				return True
+
+	# Check vertical locations for win
+	for c in range(NColumnas):
+		for r in range(NFilas-3):
+			if board[r][c] == piece and board[r+1][c] == piece and board[r+2][c] == piece and board[r+3][c] == piece:
+				return True
+
+	# Check positively sloped diaganols
+	for c in range(NColumnas-3):
+		for r in range(NFilas-3):
+			if board[r][c] == piece and board[r+1][c+1] == piece and board[r+2][c+2] == piece and board[r+3][c+3] == piece:
+				return True
+
+	# Check negatively sloped diaganols
+	for c in range(NColumnas-3):
+		for r in range(3, NFilas):
+			if board[r][c] == piece and board[r-1][c+1] == piece and board[r-2][c+2] == piece and board[r-3][c+3] == piece:
+				return True
+
 def Ganar(Tablero, Pieza, ventana):
     #Ganar horizontalmente
-    for F in range(NFilas):
-        for C in range(NColumnas-LIMITEHOR):
+    for C in range(NColumnas-3):
+        for F in range(NFilas):
             if Tablero[F][C] == Pieza and Tablero[F][C+1] == Pieza and Tablero[F][C+2] == Pieza and Tablero[F][C+3] == Pieza:
                 print('Gano de manera horizontal')
                 F1 = F
@@ -53,7 +78,7 @@ def Ganar(Tablero, Pieza, ventana):
 
         #Ganar verticalmente
         for C in range(NColumnas):
-            for F in range(NFilas-LIMITEVER):
+            for F in range(NFilas-3):
                 if Tablero[F][C] == Pieza and Tablero[F+1][C] == Pieza and Tablero[F+2][C] == Pieza and Tablero[F+3][C] == Pieza:
                     print('Gano de manera vertical')
                     F1 = F+1
@@ -73,8 +98,8 @@ def Ganar(Tablero, Pieza, ventana):
                     return True
 
         #Ganar Diagonalmente Positivamente
-        for C in range(NColumnas-LIMITEHOR):
-            for F in range(NFilas-LIMITEVER):
+        for C in range(NColumnas-3):
+            for F in range(NFilas-3):
                 if Tablero[F][C] == Pieza and Tablero[F+1][C+1] == Pieza and Tablero[F+2][C+2] == Pieza and Tablero[F+3][C+3] == Pieza:
                     print('Gano de manera diagonal positiva')
                     F1 = F+1
@@ -94,8 +119,8 @@ def Ganar(Tablero, Pieza, ventana):
                     return True
 
         #Ganar Diagonalmente Negativamente
-        for C in range(NColumnas-LIMITEHOR):
-            for F in range(NFilas):
+        for C in range( NColumnas-3):
+            for F in range(3,NFilas):
                 if Tablero[F][C] == Pieza and Tablero[F-1][C+1] == Pieza and Tablero[F-2][C+2] == Pieza and Tablero[F-3][C+3] == Pieza:
                     print('Gano de manera diagonal negativa')
                     F1 = F+1
