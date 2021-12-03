@@ -1,6 +1,6 @@
 #Definir el numero de final y columnas que tendrá el juego
 NFilas = 6
-NColumnas = 7
+NColumnas = 6
 
 #Definir el tipo de juego Ej conecta4 o conecta5 o conecta6 etc
 JUEGODE = 5

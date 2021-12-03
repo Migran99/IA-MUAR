@@ -36,12 +36,12 @@ while not FIN:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     #Jugador 1
                     if Turno == 0:
-                        FIN = TUPL(1, tablero, ventana, event, FONT, FIN)
+                        FIN = player_turn(1, tablero, ventana, event, FONT, FIN)
                         print("Jugando jugador 1")
                     #Jugador 2 - AI
                     else:
                         #TUPL(2)
-                        juega_AI(tablero, ventana, FONT)
+                        FIN = juega_AI(tablero, ventana, FONT, FIN)
 
                     DIB_TABLERO(tablero, ventana)
 

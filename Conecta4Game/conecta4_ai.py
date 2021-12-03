@@ -87,8 +87,9 @@ def minimax(Tablero, profundidad, maximizingPlayer):
         valor = -math.inf
         columna = random.choice(localizaciones_validas)
         for col in localizaciones_validas:
-            row = movidaLegal(Tablero, col)
+            row = filaDisp(Tablero, col)
             copia_tablero = Tablero.copy()
+            print("MAX: ",row, " - ", col)
             soltarPieza(copia_tablero, row, col, AI_PIECE)
             nueva_puntuacion = minimax(copia_tablero,profundidad-1, False)[1]
             if nueva_puntuacion > valor:
@@ -99,8 +100,9 @@ def minimax(Tablero, profundidad, maximizingPlayer):
     else:
         valor = math.inf
         for col in localizaciones_validas:
-            row = movidaLegal(Tablero, col)
+            row = filaDisp(Tablero, col)
             copia_tablero = Tablero.copy()
+            print("MIN: ",row, " - ", col)
             soltarPieza(copia_tablero, row, col, PLAYER_PIECE)
             nueva_puntuacion =  minimax(copia_tablero,profundidad-1, True)[1]
             if nueva_puntuacion < valor:
@@ -124,13 +126,11 @@ def agente(Tablero, Pieza):
      return mejor_col
 
 
-def juega_AI(tablero, ventana, font):
-    global FIN
-    global Turno
+def juega_AI(tablero, ventana, font, FIN):
     Player(draw_text, ventana, AI_PIECE)
    
-    x = agente(tablero,AI_PIECE)
-    #x, minimax_score = minimax(tablero, 2, True)
+    #x = agente(tablero,AI_PIECE)
+    x, minimax_score = minimax(tablero, 2, True)
 
     if movidaLegal(tablero, x):
         pygame.time.wait(500)
@@ -144,6 +144,4 @@ def juega_AI(tablero, ventana, font):
             ventana.blit(TXT, (10, 10))
             FIN = True
 
-         
-        Turno += 1
-        Turno = Turno % 2
+        return FIN

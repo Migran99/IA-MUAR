@@ -189,7 +189,7 @@ def Start_events(state):
             print("PRESSED")
     return state
 
-def TUPL(player, tablero, ventana, event, font, FIN):
+def player_turn(player, tablero, ventana, event, font, FIN):
     Player(draw_text, ventana, player)
     posx = event.pos[0]
     x = int(math.floor(posx/TAMFI))
