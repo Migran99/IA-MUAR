@@ -3,13 +3,13 @@ NFilas = 6
 NColumnas = 6
 
 #Definir el tipo de juego Ej conecta4 o conecta5 o conecta6 etc
-JUEGODE = 5
+JUEGODE = 4
 
 LIMITEHOR = 3
 LIMITEVER = 2
 
-ANCHO_VENTANA=4
-VACIO=0
+ANCHO_VENTANA = 4
+VACIO = 0
 FIN = False
 
 START_TEXT_SIZE = 16

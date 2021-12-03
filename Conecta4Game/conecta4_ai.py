@@ -6,55 +6,55 @@ from conecta4Functions import *
 def funcion_puntua(ventana_deslizante,Pieza):
     puntuacion=0
     pieza_contrario= PLAYER_PIECE
-    if Pieza== PLAYER_PIECE:
+    if Pieza == PLAYER_PIECE:
         pieza_contrario= AI_PIECE
     
-    if ventana_deslizante.count(Pieza)==4:
+    if ventana_deslizante.count(Pieza) == 4:
             puntuacion += 100
-    elif ventana_deslizante.count(Pieza)==3 and ventana_deslizante.count(VACIO)==1:
-            puntuacion += 10
-    elif ventana_deslizante.count(Pieza)==2 and ventana_deslizante.count(VACIO)==2:
+    elif ventana_deslizante.count(Pieza) == 3 and ventana_deslizante.count(VACIO) == 1:
             puntuacion += 5
+    elif ventana_deslizante.count(Pieza) == 2 and ventana_deslizante.count(VACIO) == 2:
+            puntuacion += 2
 
     if ventana_deslizante.count(pieza_contrario)==3 and ventana_deslizante.count(VACIO)==1:
-            puntuacion -= 80
+            puntuacion -= 4
 
     return puntuacion
 
-def puntuacion_heuristica(Tablero,Pieza):
+def puntuacion_heuristica(Tablero, Pieza):
     puntuacion=0
 
     ##Score center column
-    vector_centro = [int(i) for i in list(Tablero[:,NColumnas//2])]
+    vector_centro = [int(i) for i in list(Tablero[:, NColumnas//2])]
     cuenta_centro = vector_centro.count(Pieza)
-    puntuacion += cuenta_centro*6
+    puntuacion += cuenta_centro * 3
 
     ##Puntuar horizontalmente
     for F in range(NFilas):
-        vector_filas=[int(t) for t in list(Tablero[F,:])]
-        for C in range(NColumnas-LIMITEHOR):
-            ventana_deslizante=vector_filas[C:C+ANCHO_VENTANA] 
+        vector_filas=[int(t) for t in list(Tablero[F, :])]
+        for C in range(NColumnas-3):
+            ventana_deslizante = vector_filas[C:C+ANCHO_VENTANA] 
             puntuacion += funcion_puntua(ventana_deslizante,Pieza)
 
     ##Puntuar verticalmente
     for C in range(NColumnas):
         vector_columnas=[int(i) for i in list(Tablero[:,C])]
         for F in range(NFilas-3):
-            ventana_deslizante=vector_columnas[F:F+ANCHO_VENTANA]
-            puntuacion+=funcion_puntua(ventana_deslizante,Pieza)
+            ventana_deslizante = vector_columnas[F:F+ANCHO_VENTANA]
+            puntuacion += funcion_puntua(ventana_deslizante,Pieza)
 
     ##Puntuar diagonalmente positivo
 
     for F in range(NFilas-3):
         for C in range (NColumnas-3):
-            ventana_deslizante=[Tablero[F+i][C+i] for i in range (ANCHO_VENTANA)]
-            puntuacion+=funcion_puntua(ventana_deslizante,Pieza)
+            ventana_deslizante = [Tablero[F+i][C+i] for i in range (ANCHO_VENTANA)]
+            puntuacion += funcion_puntua(ventana_deslizante,Pieza)
     ##Puntuar diagonalmente negativo
 
     for F in range(NFilas-3):
         for C in range (NColumnas-3):
-            ventana_deslizante=[Tablero[F+3-i][C+i] for i in range(ANCHO_VENTANA)]
-            puntuacion+=funcion_puntua(ventana_deslizante,Pieza)
+            ventana_deslizante = [Tablero[F+3-i][C+i] for i in range(ANCHO_VENTANA)]
+            puntuacion += funcion_puntua(ventana_deslizante,Pieza)
     return puntuacion
 
 def es_nodo_final(Tablero):
@@ -62,7 +62,7 @@ def es_nodo_final(Tablero):
 
 
 def pos_validas(Tablero):
-    posiciones_v=[]
+    posiciones_v = []
     for col in range(NColumnas):
         if movidaLegal(Tablero,col):
             posiciones_v.append(col)
@@ -90,7 +90,7 @@ def minimax(Tablero, profundidad, maximizingPlayer):
             row = filaDisp(Tablero, col)
             copia_tablero = Tablero.copy()
             print("MAX: ",row, " - ", col)
-            soltarPieza(copia_tablero, row, col, AI_PIECE)
+            soltarPieza(copia_tablero, col, row, AI_PIECE) # Cambio de columna y row, no entiendo
             nueva_puntuacion = minimax(copia_tablero,profundidad-1, False)[1]
             if nueva_puntuacion > valor:
                 valor = nueva_puntuacion
@@ -99,11 +99,12 @@ def minimax(Tablero, profundidad, maximizingPlayer):
 
     else:
         valor = math.inf
+        columna = random.choice(localizaciones_validas)
         for col in localizaciones_validas:
             row = filaDisp(Tablero, col)
             copia_tablero = Tablero.copy()
             print("MIN: ",row, " - ", col)
-            soltarPieza(copia_tablero, row, col, PLAYER_PIECE)
+            soltarPieza(copia_tablero, col, row, PLAYER_PIECE) # Cambio de column y row, no entiendo
             nueva_puntuacion =  minimax(copia_tablero,profundidad-1, True)[1]
             if nueva_puntuacion < valor:
                 valor = nueva_puntuacion
@@ -130,7 +131,7 @@ def juega_AI(tablero, ventana, font, FIN):
     Player(draw_text, ventana, AI_PIECE)
    
     #x = agente(tablero,AI_PIECE)
-    x, minimax_score = minimax(tablero, 2, True)
+    x, minimax_score = minimax(tablero, 5, True)
 
     if movidaLegal(tablero, x):
         pygame.time.wait(500)
