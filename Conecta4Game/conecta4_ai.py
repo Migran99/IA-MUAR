@@ -69,7 +69,7 @@ def pos_validas(Tablero):
 
     return posiciones_v
 
-def minimax(Tablero, profundidad, maximizingPlayer):
+def minimax(Tablero, profundidad, alpha, beta, maximizingPlayer):
     localizaciones_validas = pos_validas(Tablero)
     nodo_final = es_nodo_final(Tablero)
     if profundidad == 0 or nodo_final:
@@ -91,10 +91,13 @@ def minimax(Tablero, profundidad, maximizingPlayer):
             copia_tablero = Tablero.copy()
             print("MAX: ",row, " - ", col)
             soltarPieza(copia_tablero, col, row, AI_PIECE) # Cambio de columna y row, no entiendo
-            nueva_puntuacion = minimax(copia_tablero,profundidad-1, False)[1]
+            nueva_puntuacion = minimax(copia_tablero,profundidad-1, alpha, beta, False)[1]
             if nueva_puntuacion > valor:
                 valor = nueva_puntuacion
                 columna = col
+            alpha = max(alpha, valor)
+            if alpha >= beta:
+                break
         return columna, valor
 
     else:
@@ -105,12 +108,16 @@ def minimax(Tablero, profundidad, maximizingPlayer):
             copia_tablero = Tablero.copy()
             print("MIN: ",row, " - ", col)
             soltarPieza(copia_tablero, col, row, PLAYER_PIECE) # Cambio de column y row, no entiendo
-            nueva_puntuacion =  minimax(copia_tablero,profundidad-1, True)[1]
+            nueva_puntuacion =  minimax(copia_tablero,profundidad-1, alpha, beta, True)[1]
             if nueva_puntuacion < valor:
                 valor = nueva_puntuacion
                 columna = col
+            beta = min(beta, valor)
+            if alpha >= beta:
+                break
         return columna, valor
     
+
 def agente(Tablero, Pieza):
      posiciones_v=pos_validas(Tablero)
      mejor_puntuacion=100000
@@ -131,7 +138,7 @@ def juega_AI(tablero, ventana, font, FIN):
     Player(draw_text, ventana, AI_PIECE)
    
     #x = agente(tablero,AI_PIECE)
-    x, minimax_score = minimax(tablero, 5, True)
+    x, minimax_score = minimax(tablero, 5, -math.inf, math.inf, True)
 
     if movidaLegal(tablero, x):
         pygame.time.wait(500)
