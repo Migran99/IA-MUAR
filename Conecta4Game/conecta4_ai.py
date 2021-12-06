@@ -6,25 +6,33 @@ from conecta4Functions import *
 
 # Funciones de la IA del juego
 def funcion_puntua(ventana_deslizante, Pieza):
+    """On the first attempt of the IA the function
+    which introduce the weights to calculate the
+    punctuation of every move"""
     puntuacion = 0
     pieza_contrario = PLAYER_PIECE
     if Pieza == PLAYER_PIECE:
         pieza_contrario = AI_PIECE
     if ventana_deslizante.count(Pieza) == 4:
             puntuacion += 100
-    elif ventana_deslizante.count(Pieza) == 3 and ventana_deslizante.count(VACIO) == 1:
+    elif ventana_deslizante.count(Pieza) == 3 \
+            and ventana_deslizante.count(VACIO) == 1:
             puntuacion += 5
-    elif ventana_deslizante.count(Pieza) == 2 and ventana_deslizante.count(VACIO) == 2:
+    elif ventana_deslizante.count(Pieza) == 2 \
+            and ventana_deslizante.count(VACIO) == 2:
             puntuacion += 2
-    if ventana_deslizante.count(pieza_contrario) == 3 and ventana_deslizante.count(VACIO) == 1:
+    if ventana_deslizante.count(pieza_contrario) == 3 \
+            and ventana_deslizante.count(VACIO) == 1:
             puntuacion -= 4
 
     return puntuacion
 
 
 def puntuacion_heuristica(Tablero, Pieza):
+    """Function which returns the accumulated punctuation
+    en each case: horizontal, vertical and the two types
+    of diagonal"""
     puntuacion = 0
-
     # Score center column
     vector_centro = [int(i) for i in list(Tablero[:, NColumnas//2])]
     cuenta_centro = vector_centro.count(Pieza)
@@ -47,22 +55,29 @@ def puntuacion_heuristica(Tablero, Pieza):
     # Puntuar diagonalmente positivo
     for F in range(NFilas-3):
         for C in range(NColumnas-3):
-            ventana_deslizante = [Tablero[F+i][C+i] for i in range(ANCHO_VENTANA)]
+            ventana_deslizante = [Tablero[F+i][C+i]
+                                  for i in range(ANCHO_VENTANA)]
             puntuacion += funcion_puntua(ventana_deslizante, Pieza)
 
     # Puntuar diagonalmente negativo
     for F in range(NFilas-3):
         for C in range(NColumnas-3):
-            ventana_deslizante = [Tablero[F+3-i][C+i] for i in range(ANCHO_VENTANA)]
+            ventana_deslizante = [Tablero[F+3-i][C+i]
+                                  for i in range(ANCHO_VENTANA)]
             puntuacion += funcion_puntua(ventana_deslizante, Pieza)
+
     return puntuacion
 
 
 def es_nodo_final(Tablero):
-    return winning_move(Tablero, PLAYER_PIECE) or winning_move(Tablero, AI_PIECE) or len(pos_validas(Tablero)) == 0
+    """Check if the node that is being checked is final node"""
+    return winning_move(Tablero, PLAYER_PIECE) \
+        or winning_move(Tablero, AI_PIECE) \
+        or len(pos_validas(Tablero)) == 0
 
 
 def pos_validas(Tablero):
+    """Returns a vector of the valid positions that could be played"""
     posiciones_v = []
     for col in range(NColumnas):
         if movidaLegal(Tablero, col):
@@ -72,6 +87,7 @@ def pos_validas(Tablero):
 
 
 def minimax(Tablero, profundidad, alpha, beta, maximizingPlayer):
+    """Minimax algorythm with alpha-beta pruning method"""
     localizaciones_validas = pos_validas(Tablero)
     nodo_final = es_nodo_final(Tablero)
     if profundidad == 0 or nodo_final:
@@ -92,8 +108,9 @@ def minimax(Tablero, profundidad, alpha, beta, maximizingPlayer):
             row = filaDisp(Tablero, col)
             copia_tablero = Tablero.copy()
             print("MAX: ", row, " - ", col)
-            soltarPieza(copia_tablero, col, row, AI_PIECE)  # Cambio de columna y row, no entiendo
-            nueva_puntuacion = minimax(copia_tablero, profundidad-1, alpha, beta, False)[1]
+            soltarPieza(copia_tablero, col, row, AI_PIECE)  # col row change
+            nueva_puntuacion = minimax(copia_tablero, profundidad-1,
+                                       alpha, beta, False)[1]
             if nueva_puntuacion > valor:
                 valor = nueva_puntuacion
                 columna = col
@@ -109,8 +126,9 @@ def minimax(Tablero, profundidad, alpha, beta, maximizingPlayer):
             row = filaDisp(Tablero, col)
             copia_tablero = Tablero.copy()
             print("MIN: ", row, " - ", col)
-            soltarPieza(copia_tablero, col, row, PLAYER_PIECE)  # Cambio de column y row, no entiendo
-            nueva_puntuacion = minimax(copia_tablero, profundidad-1, alpha, beta, True)[1]
+            soltarPieza(copia_tablero, col, row, PLAYER_PIECE)  # colrow change
+            nueva_puntuacion = minimax(copia_tablero, profundidad-1,
+                                       alpha, beta, True)[1]
             if nueva_puntuacion < valor:
                 valor = nueva_puntuacion
                 columna = col
@@ -121,6 +139,7 @@ def minimax(Tablero, profundidad, alpha, beta, maximizingPlayer):
 
 
 def agente(Tablero, Pieza):
+    """Agent that plays with a more elementary artificial intelligence"""
     posiciones_v = pos_validas(Tablero)
     mejor_puntuacion = 100000
     mejor_col = random.choice(posiciones_v)
@@ -137,6 +156,7 @@ def agente(Tablero, Pieza):
 
 
 def juega_AI(tablero, ventana, font, FIN):
+    """Agent that plays with the minmax algorythm"""
     Player(draw_text, ventana, AI_PIECE)
 
     # x = agente(tablero,AI_PIECE)
