@@ -8,15 +8,18 @@ import math
 
 
 def crearTablero():
+    """Create the board with NFilas y NColumnas"""
     Tablero = np.zeros((NFilas, NColumnas))
     return Tablero
 
 
 def soltarPieza(Tablero, y, x, Pieza):
+    """Drop the piece at the specified coordinates"""
     Tablero[x][y] = Pieza
 
 
 def movidaLegal(Tablero, x):
+    """Informs if the movement is valid"""
     if Tablero[NFilas-1][x] == 0:
         return True
     else:
@@ -25,16 +28,19 @@ def movidaLegal(Tablero, x):
 
 
 def filaDisp(Tablero, x):
+    """Informs of the available rows"""
     for i in range(NFilas):
         if Tablero[i][x] == 0:
             return i
 
 
 def Orientacion(Tablero):
+    """Flip the board"""
     print(np.flip(Tablero, 0))
 
 
 def winning_move(board, piece):
+    """"Check locations for winning last move"""
     # Check horizontal locations for win
     for c in range(NColumnas-3):
         for r in range(NFilas):
@@ -73,6 +79,7 @@ def winning_move(board, piece):
 
 
 def Ganar(Tablero, Pieza, ventana):
+    """Similar as winning_move but drawing if it wins a 4x1 rectangle"""
     # Ganar horizontalmente
     for C in range(NColumnas-3):
         for F in range(NFilas):
@@ -181,6 +188,7 @@ def Ganar(Tablero, Pieza, ventana):
 
 
 def DIB_TABLERO(Tablero, ventana):
+    """Draw the board knowing the measures of the window and spaces"""
     for C in range(NColumnas):
         for F in range(NFilas):
             pygame.draw.rect(ventana, AZUL,
@@ -207,6 +215,8 @@ def DIB_TABLERO(Tablero, ventana):
 
 
 def draw_text(words, ventana, pos, size, colour, font_name, centered=False):
+        """Draw the messages that we could read in the upper part 
+        of the board"""
         font = pygame.font.SysFont(font_name, size)
         text = font.render(words, False, colour)
         text_size = text.get_size()
@@ -218,6 +228,7 @@ def draw_text(words, ventana, pos, size, colour, font_name, centered=False):
 
 
 def Start_draw(draw_text, ventana):
+        """Function that initializes the fixed text in the board"""
         ventana.fill(NEGRO)
         draw_text('PUSH SPACE BAR', ventana, (ANCHO//2, ALTURA//2),
                  START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
@@ -234,6 +245,7 @@ def Start_draw(draw_text, ventana):
 
 
 def Player(draw_text, ventana, PL):
+    """Function introduce the text of the different turns"""
     pygame.draw.rect(ventana, NEGRO, (0, 0, NColumnas*TAMFI, TAMFI))
     pygame.display.update()
     FONT = pygame.font.SysFont("monospace", int(TAMFI/3))
@@ -245,6 +257,7 @@ def Player(draw_text, ventana, PL):
 
 
 def Start_events(state):
+    """Start the different event states of the game"""
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             state = 'playing'
@@ -253,6 +266,8 @@ def Start_events(state):
 
 
 def player_turn(player, tablero, ventana, event, font, FIN):
+    """Involves all the previous functions that have to deal 
+    with the player turn and its consequences"""
     Player(draw_text, ventana, player)
     posx = event.pos[0]
     x = int(math.floor(posx/TAMFI))
