@@ -154,6 +154,28 @@ def agente(Tablero, Pieza):
 
     return mejor_col
 
+def TurnoJugadores(Turno, tablero, ventana, event, FONT, FIN):
+    """ In function of the type of turn do one thing or 
+    another """
+    # Jugador 1
+    if Turno == 0:
+        FIN = player_turn(1, tablero, ventana,
+                            event, FONT, FIN)
+        return FIN
+    # Jugador 2 - AI
+    else:
+        # TUPL(2)
+        FIN = juega_AI(tablero, ventana, FONT, FIN)
+        return FIN
+    
+
+def CambioTurno(Turno):
+    """Realiza el cambio de turno"""
+    Turno += 1
+    Turno = Turno % 2
+
+    return Turno
+
 
 def juega_AI(tablero, ventana, font, FIN):
     """Agent that plays with the minmax algorythm"""

@@ -35,21 +35,10 @@ while not FIN:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    # Jugador 1
-                    if Turno == 0:
-                        FIN = player_turn(1, tablero, ventana,
-                                          event, FONT, FIN)
-                        print("Jugando jugador 1")
-                    # Jugador 2 - AI
-                    else:
-                        # TUPL(2)
-                        FIN = juega_AI(tablero, ventana, FONT, FIN)
-
+                    FIN = TurnoJugadores(Turno, tablero, ventana,
+                                        event, FONT, FIN)
                     DIB_TABLERO(tablero, ventana)
-
-                    Turno += 1
-                    Turno = Turno % 2
-
+                    Turno = CambioTurno(Turno)
                     if FIN:
                         pygame.time.wait(3500)
                         # VIDEO()

@@ -77,6 +77,75 @@ def winning_move(board, piece):
                and board[r-3][c+3] == piece:
                     return True
 
+def DibujaRaya(ventana, F1, C1, F2, C2, F3, C3, F4, C4):
+    """Marca la jugada ganadora final"""
+    pygame.draw.rect(ventana, BLANCO,
+                    (C1*TAMFI, ALTURA-F1*TAMFI, TAMFI, TAMFI))
+    pygame.draw.rect(ventana, BLANCO,
+                    (C2*TAMFI, ALTURA-F2*TAMFI, TAMFI, TAMFI))
+    pygame.draw.rect(ventana, BLANCO,
+                    (C3*TAMFI, ALTURA-F3*TAMFI, TAMFI, TAMFI))
+    pygame.draw.rect(ventana, BLANCO,
+                    (C4*TAMFI, ALTURA-F4*TAMFI, TAMFI, TAMFI))
+    pygame.display.update()
+
+    pygame.time.wait(3500)
+
+
+def CasillasGanadoras(TipoVictoria, F, C):
+    """Select the winning cells in function of type of
+    of victory"""
+    if TipoVictoria == 0: # Gana de forma horizontal
+        print('Gano de manera horizontal')
+        F1 = F+1
+        C1 = C
+        F2 = F+1
+        C2 = C+1
+        F3 = F+1
+        C3 = C+2
+        F4 = F+1
+        C4 = C+3
+        return F1, C1, F2, C2, F3, C3, F4, C4
+
+    elif TipoVictoria == 1: # Gana de forma vertical
+        print('Gano de manera vertical')
+        F1 = F+1
+        C1 = C
+        F2 = F+2
+        C2 = C
+        F3 = F+3
+        C3 = C
+        F4 = F+4
+        C4 = C
+        return F1, C1, F2, C2, F3, C3, F4, C4
+
+    elif TipoVictoria == 2: # Gana de forma diagonal Positiva
+        print('Gano de manera diagonal positiva')
+        F1 = F+1
+        C1 = C
+        F2 = F+2
+        C2 = C+1
+        F3 = F+3
+        C3 = C+2
+        F4 = F+4
+        C4 = C+3
+        return F1, C1, F2, C2, F3, C3, F4, C4
+
+    elif TipoVictoria == 3: # Gana de forma diagonal Negativa
+        print('Gano de manera diagonal negativa')
+        F1 = F+1
+        C1 = C
+        F2 = F
+        C2 = C+1
+        F3 = F-1
+        C3 = C+2
+        F4 = F-2
+        C4 = C+3
+        return F1, C1, F2, C2, F3, C3, F4, C4
+
+    else:
+        print('Victoria no se encuentra entre los valores reconocidos')
+
 
 def Ganar(Tablero, Pieza, ventana):
     """Similar as winning_move but drawing if it wins a 4x1 rectangle"""
@@ -85,106 +154,38 @@ def Ganar(Tablero, Pieza, ventana):
         for F in range(NFilas):
             if Tablero[F][C] == Pieza and Tablero[F][C+1] == Pieza \
                and Tablero[F][C+2] == Pieza and Tablero[F][C+3] == Pieza:
-                    print('Gano de manera horizontal')
-                    F1 = F
-                    C1 = C
-                    F2 = F
-                    C2 = C+1
-                    F3 = F
-                    C3 = C+2
-                    F4 = F
-                    C4 = C+3
-                    pygame.draw.rect(ventana, BLANCO,
-                                (C1*TAMFI, ALTURA-(F+1)*TAMFI, TAMFI, TAMFI))
-                    pygame.draw.rect(ventana, BLANCO,
-                                (C2*TAMFI, ALTURA-(F+1)*TAMFI, TAMFI, TAMFI))
-                    pygame.draw.rect(ventana, BLANCO,
-                                (C3*TAMFI, ALTURA-(F+1)*TAMFI, TAMFI, TAMFI))
-                    pygame.draw.rect(ventana, BLANCO,
-                                (C4*TAMFI, ALTURA-(F+1)*TAMFI, TAMFI, TAMFI))
-                    pygame.display.update()
-                    pygame.time.wait(3500)
+                    F1, C1, F2, C2, F3, C3, F4, C4 = CasillasGanadoras(0, F, C)
+                    DibujaRaya(ventana, F1, C1, F2, C2, F3, C3, F4, C4)
                     return True
 
-        # Ganar verticalmente
-        for C in range(NColumnas):
-            for F in range(NFilas-3):
-                if Tablero[F][C] == Pieza and Tablero[F+1][C] == Pieza \
-                   and Tablero[F+2][C] == Pieza and Tablero[F+3][C] == Pieza:
-                        print('Gano de manera vertical')
-                        F1 = F+1
-                        C1 = C
-                        F2 = F+2
-                        C2 = C
-                        F3 = F+3
-                        C3 = C
-                        F4 = F+4
-                        C4 = C
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C*TAMFI, ALTURA-F1*TAMFI, TAMFI, TAMFI))
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C*TAMFI, ALTURA-F2*TAMFI, TAMFI, TAMFI))
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C*TAMFI, ALTURA-F3*TAMFI, TAMFI, TAMFI))
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C*TAMFI, ALTURA-F4*TAMFI, TAMFI, TAMFI))
-                        pygame.display.update()
-                        pygame.time.wait(3500)
-                        return True
+    # Ganar verticalmente
+    for C in range(NColumnas):
+        for F in range(NFilas-3):
+            if Tablero[F][C] == Pieza and Tablero[F+1][C] == Pieza \
+                and Tablero[F+2][C] == Pieza and Tablero[F+3][C] == Pieza:
+                    F1, C1, F2, C2, F3, C3, F4, C4 = CasillasGanadoras(1, F, C)
+                    DibujaRaya(ventana, F1, C1, F2, C2, F3, C3, F4, C4)
+                    return True
 
-        # Ganar Diagonalmente Positivamente
-        for C in range(NColumnas-3):
-            for F in range(NFilas-3):
-                if Tablero[F][C] == Pieza and Tablero[F+1][C+1] == Pieza \
-                   and Tablero[F+2][C+2] == Pieza \
-                   and Tablero[F+3][C+3] == Pieza:
-                        print('Gano de manera diagonal positiva')
-                        F1 = F+1
-                        C1 = C
-                        F2 = F+2
-                        C2 = C+1
-                        F3 = F+3
-                        C3 = C+2
-                        F4 = F+4
-                        C4 = C+3
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C1*TAMFI, ALTURA-F1*TAMFI, TAMFI, TAMFI))
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C2*TAMFI, ALTURA-F2*TAMFI, TAMFI, TAMFI))
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C3*TAMFI, ALTURA-F3*TAMFI, TAMFI, TAMFI))
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C4*TAMFI, ALTURA-F4*TAMFI, TAMFI, TAMFI))
-                        pygame.display.update()
-                        pygame.time.wait(3500)
-                        return True
+    # Ganar Diagonalmente Positivamente
+    for C in range(NColumnas-3):
+        for F in range(NFilas-3):
+            if Tablero[F][C] == Pieza and Tablero[F+1][C+1] == Pieza \
+                and Tablero[F+2][C+2] == Pieza \
+                and Tablero[F+3][C+3] == Pieza:
+                    F1, C1, F2, C2, F3, C3, F4, C4 = CasillasGanadoras(0, F, C)
+                    DibujaRaya(ventana, F1, C1, F2, C2, F3, C3, F4, C4)
+                    return True
 
-        # Ganar Diagonalmente Negativamente
-        for C in range(NColumnas-3):
-            for F in range(3, NFilas):
-                if Tablero[F][C] == Pieza and Tablero[F-1][C+1] == Pieza \
-                   and Tablero[F-2][C+2] == Pieza \
-                   and Tablero[F-3][C+3] == Pieza:
-                        print('Gano de manera diagonal negativa')
-                        F1 = F+1
-                        C1 = C
-                        F2 = F
-                        C2 = C+1
-                        F3 = F-1
-                        C3 = C+2
-                        F4 = F-2
-                        C4 = C+3
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C1*TAMFI, ALTURA-F1*TAMFI, TAMFI, TAMFI))
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C2*TAMFI, ALTURA-F2*TAMFI, TAMFI, TAMFI))
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C3*TAMFI, ALTURA-F3*TAMFI, TAMFI, TAMFI))
-                        pygame.draw.rect(ventana, BLANCO,
-                                    (C4*TAMFI, ALTURA-F4*TAMFI, TAMFI, TAMFI))
-                        pygame.display.update()
-                        pygame.time.wait(3500)
-                        return True
+    # Ganar Diagonalmente Negativamente
+    for C in range(NColumnas-3):
+        for F in range(3, NFilas):
+            if Tablero[F][C] == Pieza and Tablero[F-1][C+1] == Pieza \
+                and Tablero[F-2][C+2] == Pieza \
+                and Tablero[F-3][C+3] == Pieza:
+                    F1, C1, F2, C2, F3, C3, F4, C4 = CasillasGanadoras(0, F, C)
+                    DibujaRaya(ventana, F1, C1, F2, C2, F3, C3, F4, C4)
+                    return True
 
 
 def DIB_TABLERO(Tablero, ventana):
@@ -267,7 +268,7 @@ def Start_events(state):
 
 def player_turn(player, tablero, ventana, event, font, FIN):
     """Involves all the previous functions that have to deal 
-    with the player turn and its consequences"""
+    with the player turn and its"""
     Player(draw_text, ventana, player)
     posx = event.pos[0]
     x = int(math.floor(posx/TAMFI))
