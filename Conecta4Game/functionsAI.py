@@ -179,7 +179,7 @@ def CambioTurno(Turno):
 def juega_AI(tablero, ventana, font, FIN):
     """Agent that plays with the minmax algorythm"""
         # x = agente(tablero,AI_PIECE)
-    x, minimax_score = minimax(tablero, 5, -math.inf, math.inf, True)
+    x, minimax_score = minimax(tablero, PROFUNDIDAD, -math.inf, math.inf, True)
 
     if movidaLegal(tablero, x):
         pygame.time.wait(500)

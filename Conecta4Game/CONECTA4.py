@@ -36,5 +36,3 @@ while not FIN:
                                         event, FONT, FIN)
                     dibTablero(tablero, ventana)
                     Turno = CambioTurno(Turno)
-                    if FIN:
-                        pygame.time.wait(3500)
