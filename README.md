@@ -15,9 +15,13 @@ Run this command to install everything:
 pip install -r ./requirements.txt  
 ```
 
-## Game without AI - Conecta4Game
+## How to play
+
+- You can configure some things in the Settings.py file. Usually it is recommended not to touch this.
 
 
-Para comenzar el juego el usuario puede "Modificar" algunos parametros en el archivo de Settings.
+- Run the `CONECTA4.py` script
 
-Para comenzar el juego solo es necesario correr el archivo "main.py" o "Conecta4V2.py".
+- The player starts always. Select the column you want to play on.
+
+- The AI goes next. Click to make the algorithm calculate the next best position.
