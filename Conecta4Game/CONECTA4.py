@@ -1,14 +1,11 @@
-import numpy as np
 from numpy.lib.stride_tricks import broadcast_arrays
 from scipy.signal import convolve2d
 from Settings import *
 import pygame
 import sys
 from pygame.locals import *
-import math
-from VICTORY import *
-from conecta4_ai import *
-from conecta4Functions import *
+from functionsAI import *
+from gameFunctions import *
 
 # Inicializacion de las variables y de programas
 pygame.init()
@@ -26,10 +23,10 @@ pygame.display.update()
 
 while not FIN:
     if STATE == 'start':
-        Start_draw(draw_text, ventana)
-        STATE = Start_events(STATE)
+        initText(dibText, ventana)
+        STATE = initEvents(STATE)
     elif STATE == 'playing':
-        DIB_TABLERO(tablero, ventana)
+        dibTablero(tablero, ventana)
         for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
@@ -37,8 +34,7 @@ while not FIN:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     FIN = TurnoJugadores(Turno, tablero, ventana,
                                         event, FONT, FIN)
-                    DIB_TABLERO(tablero, ventana)
+                    dibTablero(tablero, ventana)
                     Turno = CambioTurno(Turno)
                     if FIN:
                         pygame.time.wait(3500)
-                        # VIDEO()
