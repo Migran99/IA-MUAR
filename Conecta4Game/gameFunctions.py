@@ -35,13 +35,8 @@ def filaDisp(Tablero, x):
 
 
 def Orientacion(Tablero):
-<<<<<<< HEAD:Conecta4Game/conecta4Functions.py
-    """Prints the board fliped"""
-    print(np.flip(Tablero, 0))
-=======
     """Flip the board"""
     #print(np.flip(Tablero, 0))
->>>>>>> 262730525f386a895df5d7b4f8d38255905dfc09:Conecta4Game/gameFunctions.py
 
 
 def jugadaGanadora(board, piece):
@@ -187,15 +182,8 @@ def Ganar(Tablero, Pieza, ventana):
                     return True
 
 
-<<<<<<< HEAD:Conecta4Game/conecta4Functions.py
-def DIB_TABLERO(Tablero, ventana):
-    """Draw the board knowing the measures of the window 
-    and spaces
-    """
-=======
 def dibTablero(Tablero, ventana):
     """Draw the board knowing the measures of the window and spaces"""
->>>>>>> 262730525f386a895df5d7b4f8d38255905dfc09:Conecta4Game/gameFunctions.py
     for C in range(NColumnas):
         for F in range(NFilas):
             pygame.draw.rect(ventana, AZUL,
@@ -278,14 +266,7 @@ def initEvents(state):
 
 def turnoJugador(player, tablero, ventana, event, font, FIN):
     """Involves all the previous functions that have to deal 
-<<<<<<< HEAD:Conecta4Game/conecta4Functions.py
-    with the player turn and returns the board and the text 
-    drawn
-    """
-    Player(draw_text, ventana, player)
-=======
     with the player turn and its"""
->>>>>>> 262730525f386a895df5d7b4f8d38255905dfc09:Conecta4Game/gameFunctions.py
     posx = event.pos[0]
     x = int(math.floor(posx/TAMFI))
 

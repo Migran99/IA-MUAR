@@ -181,15 +181,8 @@ def CambioTurno(Turno):
 
 def juega_AI(tablero, ventana, font, FIN):
     """Agent that plays with the minmax algorythm"""
-<<<<<<< HEAD:Conecta4Game/conecta4_ai.py
-    Player(draw_text, ventana, AI_PIECE)
-
-    # x = agente(tablero,AI_PIECE) --> Otra función IA mas básica
-    x, minimax_score = minimax(tablero, 5, -math.inf, math.inf, True)
-=======
         # x = agente(tablero,AI_PIECE)
     x, minimax_score = minimax(tablero, PROFUNDIDAD, -math.inf, math.inf, True)
->>>>>>> 262730525f386a895df5d7b4f8d38255905dfc09:Conecta4Game/functionsAI.py
 
     if movidaLegal(tablero, x):
         pygame.time.wait(500)

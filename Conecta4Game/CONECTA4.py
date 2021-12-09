@@ -4,15 +4,8 @@ from Settings import *
 import pygame
 import sys
 from pygame.locals import *
-<<<<<<< HEAD:Conecta4Game/CONECTA4V2.py
-import math
-#from VICTORY import *
-from conecta4_ai import *
-from conecta4Functions import *
-=======
 from functionsAI import *
 from gameFunctions import *
->>>>>>> 262730525f386a895df5d7b4f8d38255905dfc09:Conecta4Game/CONECTA4.py
 
 # Inicializacion de las variables y de programas
 pygame.init()
