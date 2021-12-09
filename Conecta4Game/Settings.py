@@ -1,10 +1,15 @@
 #Definir el numero de final y columnas que tendrá el juego
 NFilas = 6
-NColumnas = 6
+NColumnas = 7
 
 #Definir el tipo de juego Ej conecta4 o conecta5 o conecta6 etc
 JUEGODE = 4
 
+#Definir dificultad de la IA - Profundidad de búsqueda
+PROFUNDIDAD = 5
+
+
+## Parametros juegos
 LIMITEHOR = 3
 LIMITEVER = 2
 

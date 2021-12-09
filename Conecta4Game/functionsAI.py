@@ -1,11 +1,11 @@
 import pygame
 import random
 from Settings import *
-from conecta4Functions import *
+from gameFunctions import *
 
 
 # Funciones de la IA del juego
-def funcion_puntua(ventana_deslizante, Pieza):
+def funcionPuntua(ventana_deslizante, Pieza):
     """On the first attempt of the IA the function
     which introduce the weights to calculate the
     punctuation of every move
@@ -29,7 +29,7 @@ def funcion_puntua(ventana_deslizante, Pieza):
     return puntuacion
 
 
-def puntuacion_heuristica(Tablero, Pieza):
+def puntuacionHeuristica(Tablero, Pieza):
     """Function which returns the accumulated punctuation
     en each case: horizontal, vertical and the two types
     of diagonal
@@ -45,40 +45,40 @@ def puntuacion_heuristica(Tablero, Pieza):
         vector_filas = [int(t) for t in list(Tablero[F, :])]
         for C in range(NColumnas-3):
             ventana_deslizante = vector_filas[C:C+ANCHO_VENTANA]
-            puntuacion += funcion_puntua(ventana_deslizante, Pieza)
+            puntuacion += funcionPuntua(ventana_deslizante, Pieza)
 
     # Puntuar verticalmente
     for C in range(NColumnas):
         vector_columnas = [int(i) for i in list(Tablero[:, C])]
         for F in range(NFilas-3):
             ventana_deslizante = vector_columnas[F:F+ANCHO_VENTANA]
-            puntuacion += funcion_puntua(ventana_deslizante, Pieza)
+            puntuacion += funcionPuntua(ventana_deslizante, Pieza)
 
     # Puntuar diagonalmente positivo
     for F in range(NFilas-3):
         for C in range(NColumnas-3):
             ventana_deslizante = [Tablero[F+i][C+i]
                                   for i in range(ANCHO_VENTANA)]
-            puntuacion += funcion_puntua(ventana_deslizante, Pieza)
+            puntuacion += funcionPuntua(ventana_deslizante, Pieza)
 
     # Puntuar diagonalmente negativo
     for F in range(NFilas-3):
         for C in range(NColumnas-3):
             ventana_deslizante = [Tablero[F+3-i][C+i]
                                   for i in range(ANCHO_VENTANA)]
-            puntuacion += funcion_puntua(ventana_deslizante, Pieza)
+            puntuacion += funcionPuntua(ventana_deslizante, Pieza)
 
     return puntuacion
 
 
-def es_nodo_final(Tablero):
+def es_nodoFinal(Tablero):
     """Check if the node that is being checked is final node"""
-    return winning_move(Tablero, PLAYER_PIECE) \
-        or winning_move(Tablero, AI_PIECE) \
-        or len(pos_validas(Tablero)) == 0
+    return jugadaGanadora(Tablero, PLAYER_PIECE) \
+        or jugadaGanadora(Tablero, AI_PIECE) \
+        or len(posValidas(Tablero)) == 0
 
 
-def pos_validas(Tablero):
+def posValidas(Tablero):
     """Returns a vector of the valid positions that could be played"""
     posiciones_v = []
     for col in range(NColumnas):
@@ -90,18 +90,18 @@ def pos_validas(Tablero):
 
 def minimax(Tablero, profundidad, alpha, beta, maximizingPlayer):
     """Minimax algorythm with alpha-beta pruning method"""
-    localizaciones_validas = pos_validas(Tablero)
-    nodo_final = es_nodo_final(Tablero)
+    localizaciones_validas = posValidas(Tablero)
+    nodo_final = es_nodoFinal(Tablero)
     if profundidad == 0 or nodo_final:
         if nodo_final:
-            if winning_move(Tablero, AI_PIECE):
+            if jugadaGanadora(Tablero, AI_PIECE):
                 return (None, 1000000000000000000)  # inf
-            elif winning_move(Tablero, PLAYER_PIECE):
+            elif jugadaGanadora(Tablero, PLAYER_PIECE):
                 return (None, -10000000000000000000)  # menos inf
             else:  # No + mov validos
                 return (None, 0)
         else:  # Profundidad 0
-            return (None, puntuacion_heuristica(Tablero, AI_PIECE))
+            return (None, puntuacionHeuristica(Tablero, AI_PIECE))
 
     if maximizingPlayer:
         valor = -math.inf
@@ -109,7 +109,7 @@ def minimax(Tablero, profundidad, alpha, beta, maximizingPlayer):
         for col in localizaciones_validas:
             row = filaDisp(Tablero, col)
             copia_tablero = Tablero.copy()
-            print("MAX: ", row, " - ", col)
+            #print("MAX: ", row, " - ", col)
             soltarPieza(copia_tablero, col, row, AI_PIECE)  # col row change
             nueva_puntuacion = minimax(copia_tablero, profundidad-1,
                                        alpha, beta, False)[1]
@@ -127,7 +127,7 @@ def minimax(Tablero, profundidad, alpha, beta, maximizingPlayer):
         for col in localizaciones_validas:
             row = filaDisp(Tablero, col)
             copia_tablero = Tablero.copy()
-            print("MIN: ", row, " - ", col)
+            #print("MIN: ", row, " - ", col)
             soltarPieza(copia_tablero, col, row, PLAYER_PIECE)  # colrow change
             nueva_puntuacion = minimax(copia_tablero, profundidad-1,
                                        alpha, beta, True)[1]
@@ -142,14 +142,14 @@ def minimax(Tablero, profundidad, alpha, beta, maximizingPlayer):
 
 def agente(Tablero, Pieza):
     """Agent that plays with a more elementary artificial intelligence"""
-    posiciones_v = pos_validas(Tablero)
+    posiciones_v = posValidas(Tablero)
     mejor_puntuacion = 100000
     mejor_col = random.choice(posiciones_v)
     for y in posiciones_v:
         x = filaDisp(Tablero, y)
         Tablero_auxiliar = Tablero.copy()
         soltarPieza(Tablero_auxiliar, y, x, Pieza)
-        puntuacion = puntuacion_heuristica(Tablero_auxiliar, Pieza)
+        puntuacion = puntuacionHeuristica(Tablero_auxiliar, Pieza)
         if puntuacion > mejor_puntuacion:
             mejor_puntuacion = puntuacion
             mejor_col = y
@@ -161,13 +161,12 @@ def TurnoJugadores(Turno, tablero, ventana, event, FONT, FIN):
     another 
     """
     # Jugador 1
-    if Turno == 0:
-        FIN = player_turn(1, tablero, ventana,
+    if Turno == PLAYER:
+        FIN = turnoJugador(PLAYER_PIECE, tablero, ventana,
                             event, FONT, FIN)
         return FIN
     # Jugador 2 - AI
     else:
-        # TUPL(2)
         FIN = juega_AI(tablero, ventana, FONT, FIN)
         return FIN
     
@@ -182,10 +181,15 @@ def CambioTurno(Turno):
 
 def juega_AI(tablero, ventana, font, FIN):
     """Agent that plays with the minmax algorythm"""
+<<<<<<< HEAD:Conecta4Game/conecta4_ai.py
     Player(draw_text, ventana, AI_PIECE)
 
     # x = agente(tablero,AI_PIECE) --> Otra función IA mas básica
     x, minimax_score = minimax(tablero, 5, -math.inf, math.inf, True)
+=======
+        # x = agente(tablero,AI_PIECE)
+    x, minimax_score = minimax(tablero, PROFUNDIDAD, -math.inf, math.inf, True)
+>>>>>>> 262730525f386a895df5d7b4f8d38255905dfc09:Conecta4Game/functionsAI.py
 
     if movidaLegal(tablero, x):
         pygame.time.wait(500)
@@ -198,5 +202,5 @@ def juega_AI(tablero, ventana, font, FIN):
             TXT = font.render(S, 1, BLANCO)
             ventana.blit(TXT, (10, 10))
             FIN = True
-
-        return FIN
+    Player(dibText, ventana, PLAYER_PIECE)
+    return FIN

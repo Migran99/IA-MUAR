@@ -35,11 +35,16 @@ def filaDisp(Tablero, x):
 
 
 def Orientacion(Tablero):
+<<<<<<< HEAD:Conecta4Game/conecta4Functions.py
     """Prints the board fliped"""
     print(np.flip(Tablero, 0))
+=======
+    """Flip the board"""
+    #print(np.flip(Tablero, 0))
+>>>>>>> 262730525f386a895df5d7b4f8d38255905dfc09:Conecta4Game/gameFunctions.py
 
 
-def winning_move(board, piece):
+def jugadaGanadora(board, piece):
     """"Check locations for winning last move"""
     # Check horizontal locations for win
     for c in range(NColumnas-3):
@@ -182,10 +187,15 @@ def Ganar(Tablero, Pieza, ventana):
                     return True
 
 
+<<<<<<< HEAD:Conecta4Game/conecta4Functions.py
 def DIB_TABLERO(Tablero, ventana):
     """Draw the board knowing the measures of the window 
     and spaces
     """
+=======
+def dibTablero(Tablero, ventana):
+    """Draw the board knowing the measures of the window and spaces"""
+>>>>>>> 262730525f386a895df5d7b4f8d38255905dfc09:Conecta4Game/gameFunctions.py
     for C in range(NColumnas):
         for F in range(NFilas):
             pygame.draw.rect(ventana, AZUL,
@@ -211,7 +221,7 @@ def DIB_TABLERO(Tablero, ventana):
     pygame.display.update()
 
 
-def draw_text(words, ventana, pos, size, colour, font_name, centered=False):
+def dibText(words, ventana, pos, size, colour, font_name, centered=False):
         """Draw the messages that we could read in the upper part 
         of the board
         """
@@ -225,17 +235,17 @@ def draw_text(words, ventana, pos, size, colour, font_name, centered=False):
         ventana.blit(text, pos)
 
 
-def Start_draw(draw_text, ventana):
+def initText(draw_text, ventana):
         """Function that initializes the fixed text in the board"""
         ventana.fill(NEGRO)
         draw_text('PUSH SPACE BAR', ventana, (ANCHO//2, ALTURA//2),
                  START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
         draw_text('2 jugadores', ventana, (ANCHO//2, ALTURA//2+50),
                  START_TEXT_SIZE, (30, 30, 150), START_FONT, centered=True)
-        draw_text('Conecta 4 con deep learning', ventana,
+        draw_text('Conecta 4 con MINIMAX', ventana,
                  (ANCHO//2, ALTURA//2+85), START_TEXT_SIZE,
                  (255, 255, 255), START_FONT, centered=True)
-        draw_text('Equipo 1 IA MUAR UPM 2021', ventana,
+        draw_text('Equipo 1 IA MUAR UPM 2021-2022', ventana,
                  (ANCHO//2, ALTURA//2+110), START_TEXT_SIZE, (30, 200, 150),
                  START_FONT, centered=True)
 
@@ -248,27 +258,34 @@ def Player(draw_text, ventana, PL):
     pygame.display.update()
     FONT = pygame.font.SysFont("monospace", int(TAMFI/3))
     STR = str(PL)
-    S = 'Turno del jugador ' + STR
+    if(PL == AI_PIECE):
+        S = 'Turno de la IA. Click para jugar'
+    else:
+        S = 'Turno del jugador ' + STR + '. Sel. Columna'
+
     TXT1 = FONT.render(S, 1, BLANCO)
     ventana.blit(TXT1, (10, 10))
     pygame.display.update()
 
 
-def Start_events(state):
+def initEvents(state):
     """Start the different event states of the game"""
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             state = 'playing'
-            print("PRESSED")
     return state
 
 
-def player_turn(player, tablero, ventana, event, font, FIN):
+def turnoJugador(player, tablero, ventana, event, font, FIN):
     """Involves all the previous functions that have to deal 
+<<<<<<< HEAD:Conecta4Game/conecta4Functions.py
     with the player turn and returns the board and the text 
     drawn
     """
     Player(draw_text, ventana, player)
+=======
+    with the player turn and its"""
+>>>>>>> 262730525f386a895df5d7b4f8d38255905dfc09:Conecta4Game/gameFunctions.py
     posx = event.pos[0]
     x = int(math.floor(posx/TAMFI))
 
@@ -282,4 +299,5 @@ def player_turn(player, tablero, ventana, event, font, FIN):
             TXT = font.render(S, 1, BLANCO)
             ventana.blit(TXT, (10, 10))
             FIN = True
+    Player(dibText, ventana, AI_PIECE)
     return FIN
