@@ -8,7 +8,8 @@ from conecta4Functions import *
 def funcion_puntua(ventana_deslizante, Pieza):
     """On the first attempt of the IA the function
     which introduce the weights to calculate the
-    punctuation of every move"""
+    punctuation of every move
+    """
     puntuacion = 0
     pieza_contrario = PLAYER_PIECE
     if Pieza == PLAYER_PIECE:
@@ -31,7 +32,8 @@ def funcion_puntua(ventana_deslizante, Pieza):
 def puntuacion_heuristica(Tablero, Pieza):
     """Function which returns the accumulated punctuation
     en each case: horizontal, vertical and the two types
-    of diagonal"""
+    of diagonal
+    """
     puntuacion = 0
     # Score center column
     vector_centro = [int(i) for i in list(Tablero[:, NColumnas//2])]
@@ -156,7 +158,8 @@ def agente(Tablero, Pieza):
 
 def TurnoJugadores(Turno, tablero, ventana, event, FONT, FIN):
     """ In function of the type of turn do one thing or 
-    another """
+    another 
+    """
     # Jugador 1
     if Turno == 0:
         FIN = player_turn(1, tablero, ventana,
@@ -181,7 +184,7 @@ def juega_AI(tablero, ventana, font, FIN):
     """Agent that plays with the minmax algorythm"""
     Player(draw_text, ventana, AI_PIECE)
 
-    # x = agente(tablero,AI_PIECE)
+    # x = agente(tablero,AI_PIECE) --> Otra función IA mas básica
     x, minimax_score = minimax(tablero, 5, -math.inf, math.inf, True)
 
     if movidaLegal(tablero, x):

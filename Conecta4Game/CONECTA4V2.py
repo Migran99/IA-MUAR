@@ -6,7 +6,7 @@ import pygame
 import sys
 from pygame.locals import *
 import math
-from VICTORY import *
+#from VICTORY import *
 from conecta4_ai import *
 from conecta4Functions import *
 

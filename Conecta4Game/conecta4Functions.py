@@ -35,7 +35,7 @@ def filaDisp(Tablero, x):
 
 
 def Orientacion(Tablero):
-    """Flip the board"""
+    """Prints the board fliped"""
     print(np.flip(Tablero, 0))
 
 
@@ -90,57 +90,51 @@ def DibujaRaya(ventana, F1, C1, F2, C2, F3, C3, F4, C4):
     pygame.display.update()
 
     pygame.time.wait(3500)
+    
+
+
+def SumaPesos(F, C, vpesos):
+    """Sum the weights for the selection of differents
+    cells of the board based on the updated player position
+    """
+    F1 = F+vpesos[0]
+    C1 = C+vpesos[1]
+    F2 = F+vpesos[2]
+    C2 = C+vpesos[3]
+    F3 = F+vpesos[4]
+    C3 = C+vpesos[5]
+    F4 = F+vpesos[6]
+    C4 = C+vpesos[7]
+
+    return F1, C1, F2, C2, F3, C3, F4, C4
 
 
 def CasillasGanadoras(TipoVictoria, F, C):
     """Select the winning cells in function of type of
-    of victory"""
+    of victory
+    """
     if TipoVictoria == 0: # Gana de forma horizontal
         print('Gano de manera horizontal')
-        F1 = F+1
-        C1 = C
-        F2 = F+1
-        C2 = C+1
-        F3 = F+1
-        C3 = C+2
-        F4 = F+1
-        C4 = C+3
+        vpesos=[1, 0, 1, 1, 1, 2, 1, 3] # Pesos a sumar hor
+        F1, C1, F2, C2, F3, C3, F4, C4 = SumaPesos(F, C, vpesos) 
         return F1, C1, F2, C2, F3, C3, F4, C4
 
     elif TipoVictoria == 1: # Gana de forma vertical
         print('Gano de manera vertical')
-        F1 = F+1
-        C1 = C
-        F2 = F+2
-        C2 = C
-        F3 = F+3
-        C3 = C
-        F4 = F+4
-        C4 = C
+        vpesos=[1, 0, 2, 0, 3, 0, 4, 0] # Pesos a sumar ver
+        F1, C1, F2, C2, F3, C3, F4, C4 = SumaPesos(F, C, vpesos) 
         return F1, C1, F2, C2, F3, C3, F4, C4
 
     elif TipoVictoria == 2: # Gana de forma diagonal Positiva
         print('Gano de manera diagonal positiva')
-        F1 = F+1
-        C1 = C
-        F2 = F+2
-        C2 = C+1
-        F3 = F+3
-        C3 = C+2
-        F4 = F+4
-        C4 = C+3
+        vpesos=[1, 0, 2, 1, 3, 2, 4, 3] # Pesos a sumar ver
+        F1, C1, F2, C2, F3, C3, F4, C4 = SumaPesos(F, C, vpesos) 
         return F1, C1, F2, C2, F3, C3, F4, C4
 
     elif TipoVictoria == 3: # Gana de forma diagonal Negativa
         print('Gano de manera diagonal negativa')
-        F1 = F+1
-        C1 = C
-        F2 = F
-        C2 = C+1
-        F3 = F-1
-        C3 = C+2
-        F4 = F-2
-        C4 = C+3
+        vpesos=[1, 0, 0, 1, -1, 2, -2, 3] # Pesos a sumar ver
+        F1, C1, F2, C2, F3, C3, F4, C4 = SumaPesos(F, C, vpesos) 
         return F1, C1, F2, C2, F3, C3, F4, C4
 
     else:
@@ -173,7 +167,7 @@ def Ganar(Tablero, Pieza, ventana):
             if Tablero[F][C] == Pieza and Tablero[F+1][C+1] == Pieza \
                 and Tablero[F+2][C+2] == Pieza \
                 and Tablero[F+3][C+3] == Pieza:
-                    F1, C1, F2, C2, F3, C3, F4, C4 = CasillasGanadoras(0, F, C)
+                    F1, C1, F2, C2, F3, C3, F4, C4 = CasillasGanadoras(2, F, C)
                     DibujaRaya(ventana, F1, C1, F2, C2, F3, C3, F4, C4)
                     return True
 
@@ -183,13 +177,15 @@ def Ganar(Tablero, Pieza, ventana):
             if Tablero[F][C] == Pieza and Tablero[F-1][C+1] == Pieza \
                 and Tablero[F-2][C+2] == Pieza \
                 and Tablero[F-3][C+3] == Pieza:
-                    F1, C1, F2, C2, F3, C3, F4, C4 = CasillasGanadoras(0, F, C)
+                    F1, C1, F2, C2, F3, C3, F4, C4 = CasillasGanadoras(3, F, C)
                     DibujaRaya(ventana, F1, C1, F2, C2, F3, C3, F4, C4)
                     return True
 
 
 def DIB_TABLERO(Tablero, ventana):
-    """Draw the board knowing the measures of the window and spaces"""
+    """Draw the board knowing the measures of the window 
+    and spaces
+    """
     for C in range(NColumnas):
         for F in range(NFilas):
             pygame.draw.rect(ventana, AZUL,
@@ -217,7 +213,8 @@ def DIB_TABLERO(Tablero, ventana):
 
 def draw_text(words, ventana, pos, size, colour, font_name, centered=False):
         """Draw the messages that we could read in the upper part 
-        of the board"""
+        of the board
+        """
         font = pygame.font.SysFont(font_name, size)
         text = font.render(words, False, colour)
         text_size = text.get_size()
@@ -268,10 +265,13 @@ def Start_events(state):
 
 def player_turn(player, tablero, ventana, event, font, FIN):
     """Involves all the previous functions that have to deal 
-    with the player turn and its"""
+    with the player turn and returns the board and the text 
+    drawn
+    """
     Player(draw_text, ventana, player)
     posx = event.pos[0]
     x = int(math.floor(posx/TAMFI))
+
     if movidaLegal(tablero, x):
         y = filaDisp(tablero, x)
         soltarPieza(tablero, x, y, player)
