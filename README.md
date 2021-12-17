@@ -25,3 +25,9 @@ pip install -r ./requirements.txt
 - The player starts always. Select the column you want to play on.
 
 - The AI goes next. Click to make the algorithm calculate the next best position.
+
+## INFO
+- `functionsAI.py` contains functions for the MINIMAX AI.
+- `gameFunctions.py` contains main functions for the connect 4 game.
+- `setting.py` lets the user configure some aspects about the game and AI difficulty.
+- `CONECTA4.py` contains the main game loop.

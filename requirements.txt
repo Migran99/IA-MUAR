@@ -1,6 +1,5 @@
 numpy
 scipy
 pygame
-pygame
 opencv-python
 ffpyplayer
