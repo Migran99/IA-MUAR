@@ -273,7 +273,7 @@ def GetDificulty(draw_text, ventana, DIF, state):
                 DIFI = str(1)
                 ST = 'You have chosen level ' + DIFI
                 TXT1 = FONT.render(ST, 1, BLANCO)
-                ventana.blit(TXT1, (ANCHO//2-10, ALTURA/2+150))
+                ventana.blit(TXT1, (ANCHO//2-200, ALTURA/2+150))
                 pygame.display.update()
                 pygame.time.wait(3000)
                 
