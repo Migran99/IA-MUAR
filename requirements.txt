@@ -1,5 +1,0 @@
-numpy
-scipy
-pygame
-opencv-python
-ffpyplayer
