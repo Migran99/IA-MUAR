@@ -19,6 +19,7 @@ pip install -r ./requirements.txt
 
 - You can configure some things in the Settings.py file. Usually it is recommended not to touch this.
 
+- You can choose the level of dificulty you want for the IA at the begining of the game
 
 - Run the `CONECTA4.py` script
 
@@ -29,5 +30,5 @@ pip install -r ./requirements.txt
 ## INFO
 - `functionsAI.py` contains functions for the MINIMAX AI.
 - `gameFunctions.py` contains main functions for the connect 4 game.
-- `setting.py` lets the user configure some aspects about the game and AI difficulty.
+- `setting.py` lets the user configure some aspects about the game
 - `CONECTA4.py` contains the main game loop.
