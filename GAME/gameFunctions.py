@@ -226,9 +226,20 @@ def dibText(words, ventana, pos, size, colour, font_name, centered=False):
 def initText(draw_text, ventana):
         """Function that initializes the fixed text in the board"""
         ventana.fill(NEGRO)
-        draw_text('PUSH SPACE BAR', ventana, (ANCHO//2, ALTURA//2),
-                 START_TEXT_SIZE, (170, 132, 58), START_FONT, centered=True)
-        draw_text('2 jugadores', ventana, (ANCHO//2, ALTURA//2+50),
+        draw_text('Select IA Dificulty with 1-5', ventana, (ANCHO//2, 10+100),
+                 START_TEXT_SIZE, AMARILLO, START_FONT, centered=True)
+        draw_text('1 = Easy', ventana, (10, 50+100),
+                 START_TEXT_SIZE, ROJO, START_FONT, centered=False)
+        draw_text('2 = Medium', ventana, (10, 70+100),
+                 START_TEXT_SIZE, ROJO, START_FONT, centered=False)
+        draw_text('3 = Expert', ventana, (10, 90+100),
+                 START_TEXT_SIZE, ROJO, START_FONT, centered=False)
+        draw_text('4 = Master', ventana, (10, 110+100),
+                 START_TEXT_SIZE, ROJO, START_FONT, centered=False)
+        draw_text('5 = Imposible', ventana, (10, 130+100),
+                 START_TEXT_SIZE, ROJO, START_FONT, centered=False)
+        
+        draw_text('Jugador vs IA', ventana, (ANCHO//2, ALTURA//2+50),
                  START_TEXT_SIZE, (30, 30, 150), START_FONT, centered=True)
         draw_text('Conecta 4 con MINIMAX', ventana,
                  (ANCHO//2, ALTURA//2+85), START_TEXT_SIZE,
@@ -236,10 +247,8 @@ def initText(draw_text, ventana):
         draw_text('Equipo 1 IA MUAR UPM 2021-2022', ventana,
                  (ANCHO//2, ALTURA//2+110), START_TEXT_SIZE, (30, 200, 150),
                  START_FONT, centered=True)
-
         pygame.display.update()
-
-
+        
 def Player(draw_text, ventana, PL):
     """Function introduce the text of the different turns"""
     pygame.draw.rect(ventana, NEGRO, (0, 0, NColumnas*TAMFI, TAMFI))
@@ -256,12 +265,51 @@ def Player(draw_text, ventana, PL):
     pygame.display.update()
 
 
-def initEvents(state):
-    """Start the different event states of the game"""
+def GetDificulty(draw_text, ventana, DIF, state):
+    FONT = pygame.font.SysFont("monospace", int(TAMFI/3))
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            state = 'playing'
-    return state
+        if  event.type == pygame.KEYDOWN and event.key == pygame.K_1:
+                DIF = 1
+                DIFI = str(1)
+                ST = 'You have chosen level ' + DIFI
+                TXT1 = FONT.render(ST, 1, BLANCO)
+                ventana.blit(TXT1, (ANCHO//2-200, ALTURA/2+150))
+                pygame.display.update()
+                pygame.time.wait(3000)
+                
+        if  event.type == pygame.KEYDOWN and event.key == pygame.K_2:
+                DIF = 2
+                DIFI = str(2)
+                ST = 'You have chosen level ' + DIFI
+                TXT1 = FONT.render(ST, 1, BLANCO)
+                ventana.blit(TXT1, (ANCHO//2-200, ALTURA/2+150))
+                pygame.display.update()
+                pygame.time.wait(3000)
+        if  event.type == pygame.KEYDOWN and event.key == pygame.K_3:
+                DIF = 3
+                DIFI = str(3)
+                ST = 'You have chosen level ' + DIFI
+                TXT1 = FONT.render(ST, 1, BLANCO)
+                ventana.blit(TXT1, (ANCHO//2-200, ALTURA/2+150))
+                pygame.display.update()
+                pygame.time.wait(3000)
+        if  event.type == pygame.KEYDOWN and event.key == pygame.K_4:
+                DIF = 4
+                DIFI = str(4)
+                ST = 'You have chosen level ' + DIFI
+                TXT1 = FONT.render(ST, 1, BLANCO)
+                ventana.blit(TXT1, (ANCHO//2-200, ALTURA/2+150))
+                pygame.display.update()
+                pygame.time.wait(3000)
+        if  event.type == pygame.KEYDOWN and event.key == pygame.K_5:
+                DIF = 5
+                DIFI = str(5)
+                ST = 'You have chosen level ' + DIFI
+                TXT1 = FONT.render(ST, 1, BLANCO)
+                ventana.blit(TXT1, (ANCHO//2-200, ALTURA/2+150))
+                pygame.display.update()
+                pygame.time.wait(3000)
+    return DIF
 
 
 def turnoJugador(player, tablero, ventana, event, font, FIN):
@@ -269,16 +317,19 @@ def turnoJugador(player, tablero, ventana, event, font, FIN):
     with the player turn and its"""
     posx = event.pos[0]
     x = int(math.floor(posx/TAMFI))
-
     if movidaLegal(tablero, x):
         y = filaDisp(tablero, x)
         soltarPieza(tablero, x, y, player)
         if Ganar(tablero, player, ventana):
             pygame.draw.rect(ventana, NEGRO, (0, 0, NColumnas*TAMFI, TAMFI))
             SPL = str(player)
-            S = 'player '+SPL+' WIIIINS!!'
+            S = 'The Player WIINS!'
             TXT = font.render(S, 1, BLANCO)
             ventana.blit(TXT, (10, 10))
             FIN = True
+            pygame.display.update()
+            pygame.time.wait(3000)
+
     Player(dibText, ventana, AI_PIECE)
+    
     return FIN

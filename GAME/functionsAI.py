@@ -156,7 +156,7 @@ def agente(Tablero, Pieza):
 
     return mejor_col
 
-def TurnoJugadores(Turno, tablero, ventana, event, FONT, FIN):
+def TurnoJugadores(Turno, tablero, ventana, event, FONT, FIN, DIF):
     """ In function of the type of turn do one thing or 
     another 
     """
@@ -167,7 +167,7 @@ def TurnoJugadores(Turno, tablero, ventana, event, FONT, FIN):
         return FIN
     # Jugador 2 - AI
     else:
-        FIN = juega_AI(tablero, ventana, FONT, FIN)
+        FIN = juega_AI(tablero, ventana, FONT, FIN, DIF)
         return FIN
     
 
@@ -179,10 +179,10 @@ def CambioTurno(Turno):
     return Turno
 
 
-def juega_AI(tablero, ventana, font, FIN):
+def juega_AI(tablero, ventana, font, FIN, DIF):
     """Agent that plays with the minmax algorythm"""
         # x = agente(tablero,AI_PIECE)
-    x, minimax_score = minimax(tablero, PROFUNDIDAD, -math.inf, math.inf, True)
+    x, minimax_score = minimax(tablero, DIF, -math.inf, math.inf, True)
 
     if movidaLegal(tablero, x):
         pygame.time.wait(500)
@@ -191,9 +191,11 @@ def juega_AI(tablero, ventana, font, FIN):
         if Ganar(tablero, AI_PIECE, ventana):
             pygame.draw.rect(ventana, NEGRO, (0, 0, NColumnas*TAMFI, TAMFI))
             SPL = str(AI_PIECE)
-            S = 'player '+SPL+' WIIIINS!!'
+            S = 'IA WIIIINS !!!'
             TXT = font.render(S, 1, BLANCO)
             ventana.blit(TXT, (10, 10))
             FIN = True
+            pygame.display.update()
+            pygame.time.wait(3000)
     Player(dibText, ventana, PLAYER_PIECE)
     return FIN
